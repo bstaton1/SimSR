@@ -4,7 +4,7 @@
 \alias{obs_filter}
 \title{Sample Observed States}
 \usage{
-obs_filter(params, obs)
+obs_filter(params, obs, mimic = NULL)
 }
 \arguments{
 \item{params}{A list created using \code{init_sim()}.}
@@ -18,4 +18,10 @@ A list containing the filtered observed states.
 \description{
 Based on the observed states obtained using \code{obs_sim},
 introduce a sampling frequency.
+}
+\examples{
+x = replicate(100, sum(sample_TS(params, minSRobs = 5, size = 7)))
+hist(x)
+count_obs_sr_pairs(sample_TS(params, minSRobs = 5))
+
 }

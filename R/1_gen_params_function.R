@@ -39,7 +39,7 @@ init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, rho = 0.5, min_
 
   # fishery parameters
   max_p_overfished = 0.1
-  U_SUM = 50
+  U_SUM = 100
   v = rep(1, ns)
 
   # create covariance matrix

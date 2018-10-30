@@ -8,14 +8,14 @@
 #'
 #' @return A list containing the filtered observed states.
 #'   Any year not sampled will be an NA.
+#' @examples
+#' x = replicate(100, sum(sample_TS(params, minSRobs = 5, size = 7)))
+#' hist(x)
+#' count_obs_sr_pairs(sample_TS(params, minSRobs = 5))
 #'
 #' @export
-#'examples
-# x = replicate(100, sum(sample_TS(params, minSRobs = 5, size = 7)))
-# hist(x)
-# count_obs_sr_pairs(sample_TS(params, minSRobs = 5))
 
-obs_filter = function(params, obs) {
+obs_filter = function(params, obs, mimic = NULL) {
 
   output = with(append(params, obs), {
 
@@ -24,7 +24,7 @@ obs_filter = function(params, obs) {
     # S_ts_obs_filtered = matrix(0, nt, ns)
 
     # matrix of observed years for each stock
-    NA_yrs = sapply(sample_types, function(x) !as.logical(sample_TS(minRobs = 5)))
+    NA_yrs = replicate(ns, !as.logical(sample_TS(params, mimic = mimic, minSRobs = 5)))
     # S_ts_obs_filtered[NA_yrs] = NA
 
     for (s in 1:ns) {
