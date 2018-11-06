@@ -5,7 +5,8 @@
 \title{Initialize Simulation}
 \usage{
 init_sim(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, rho = 0.5,
-  min_sigR = 0.4, max_sigR = 0.6)
+  min_sigR = 0.4, max_sigR = 0.6, U_SUM = 100,
+  max_p_overfished = 0.1)
 }
 \arguments{
 \item{nt}{Numeric vector of length 1: the number of
@@ -27,6 +28,10 @@ recruitment residuals among substocks}
 can be drawn for a substock's recruitment residuals}
 
 \item{max_sigR}{Similar to \code{min_sigR}}
+
+\item{U_SUM}{Numeric vector of length 1: beta sample size of implementation error}
+
+\item{max_p_overfished}{Numeric vector of length 1: used in setting the constant exploitation rate}
 }
 \description{
 Handles setting up the dimensional variables
