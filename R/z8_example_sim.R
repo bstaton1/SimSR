@@ -7,6 +7,7 @@
 #' @param do_plot logical. Do you want to make an SRA plot?
 #' @param save logical. Do you want to save a file containing the plot?
 #'   Only takes effect if \code{do_plot = TRUE}
+#'
 #' @export
 
 example_sim = function(U_SUM = 100, min_sigR = 0.3, max_sigR = 0.5,
