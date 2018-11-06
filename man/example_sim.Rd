@@ -24,3 +24,14 @@ Only takes effect if \code{do_plot = TRUE}}
 \description{
 An example simulation wrapper
 }
+\examples{
+example_sim(
+  U_SUM = 100,
+  min_sigR = 0.3,
+  max_sigR = 0.5,
+  max_p_overfished = 0.3,
+  do_plot = F,
+  save = F
+  )
+
+}

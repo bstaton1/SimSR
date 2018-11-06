@@ -8,17 +8,27 @@
 #' @param save logical. Do you want to save a file containing the plot?
 #'   Only takes effect if \code{do_plot = TRUE}
 #'
+#' @examples
+#' example_sim(
+#'   U_SUM = 100,
+#'   min_sigR = 0.3,
+#'   max_sigR = 0.5,
+#'   max_p_overfished = 0.3,
+#'   do_plot = F,
+#'   save = F
+#'   )
+#'
 #' @export
 
 example_sim = function(U_SUM = 100, min_sigR = 0.3, max_sigR = 0.5,
                        max_p_overfished = 0.3, do_plot = F, save = F) {
-  U_msy = c(
+  Umsy = c(
     0.6400932, 0.4595393, 0.5518526, 0.3730096,
     0.6774239, 0.4963993, 0.4309589, 0.4991643,
     0.7116140, 0.6075838, 0.4382813, 0.5283336
   )
 
-  S_msy = c(
+  Smsy = c(
     7974,  3252, 10832,  1064,
     2576,  6330,  7331,   623,
     2495,  1702,   274,  1106
@@ -59,3 +69,11 @@ example_sim = function(U_SUM = 100, min_sigR = 0.3, max_sigR = 0.5,
   )
 }
 
+example_sim(
+  U_SUM = 100,
+  min_sigR = 0.3,
+  max_sigR = 0.5,
+  max_p_overfished = 0.3,
+  do_plot = T,
+  save = T
+)
