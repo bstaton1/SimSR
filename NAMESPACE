@@ -2,6 +2,8 @@
 
 export(example_sim)
 export(gen_Rys_obs)
+export(gen_lm_mgmt)
+export(gen_mgmt)
 export(init_sim)
 export(obs_filter)
 export(obs_sim)

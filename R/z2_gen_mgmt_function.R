@@ -5,6 +5,7 @@
 #'
 #' @param params A list created using \code{init_sim()}.
 #'
+#' @export
 
 gen_mgmt = function(params) {
 
