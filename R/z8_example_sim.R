@@ -4,6 +4,7 @@
 #' @param min_sigR passed to \code{init_sim()}
 #' @param max_sigR passed to \code{init_sim()}
 #' @param max_p_overfished passed to \code{init_sim()}
+#' @param rho passed to \code{init_sim()}
 #' @param do_plot logical. Do you want to make an SRA plot?
 #' @param save logical. Do you want to save a file containing the plot?
 #'   Only takes effect if \code{do_plot = TRUE}
@@ -13,6 +14,7 @@
 #'   U_SUM = 100,
 #'   min_sigR = 0.3,
 #'   max_sigR = 0.5,
+#'   rho = 0.5,
 #'   max_p_overfished = 0.3,
 #'   do_plot = F,
 #'   save = F
@@ -21,7 +23,7 @@
 #' @export
 
 example_sim = function(U_SUM = 100, min_sigR = 0.3, max_sigR = 0.5,
-                       max_p_overfished = 0.3, do_plot = F, save = F) {
+                       max_p_overfished = 0.3, rho = 0.5, do_plot = F, save = F) {
   Umsy = c(
     0.6400932, 0.4595393, 0.5518526, 0.3730096,
     0.6774239, 0.4963993, 0.4309589, 0.4991643,
@@ -39,6 +41,7 @@ example_sim = function(U_SUM = 100, min_sigR = 0.3, max_sigR = 0.5,
     U_msy = Umsy,
     S_msy = Smsy,
     U_SUM = U_SUM,
+    rho = rho,
     min_sigR = min_sigR,
     max_sigR = max_sigR,
     max_p_overfished = max_p_overfished

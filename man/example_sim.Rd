@@ -5,7 +5,7 @@
 \title{An example simulation wrapper}
 \usage{
 example_sim(U_SUM = 100, min_sigR = 0.3, max_sigR = 0.5,
-  max_p_overfished = 0.3, do_plot = F, save = F)
+  max_p_overfished = 0.3, rho = 0.5, do_plot = F, save = F)
 }
 \arguments{
 \item{U_SUM}{passed to \code{init_sim()}}
@@ -15,6 +15,8 @@ example_sim(U_SUM = 100, min_sigR = 0.3, max_sigR = 0.5,
 \item{max_sigR}{passed to \code{init_sim()}}
 
 \item{max_p_overfished}{passed to \code{init_sim()}}
+
+\item{rho}{passed to \code{init_sim()}}
 
 \item{do_plot}{logical. Do you want to make an SRA plot?}
 
@@ -29,6 +31,7 @@ example_sim(
   U_SUM = 100,
   min_sigR = 0.3,
   max_sigR = 0.5,
+  rho = 0.5,
   max_p_overfished = 0.3,
   do_plot = F,
   save = F
