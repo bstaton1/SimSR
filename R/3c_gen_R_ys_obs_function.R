@@ -58,8 +58,8 @@ gen_Rys_obs = function(params, obs) {
 
       # generate brood year recruits for each stock
       for (y in 1:ny) {
-        if (y <= (nt - 4)) {
-          brd.yr.runs = diag(N_tas_obs[y:(y+na),,s])
+        if (y <= (nt - 3)) {
+          brd.yr.runs = diag(N_tas_obs[y:(y+na-1),,s])
           R_ys_obs[y+na-1,s] = sum(brd.yr.runs, na.rm = all(!is.na(brd.yr.runs)))
         } else {
           next()
@@ -69,11 +69,22 @@ gen_Rys_obs = function(params, obs) {
 
     N_ts_obs = apply(N_tas_obs, 3, rowSums)
 
-    R_ys_obs
+    # brood year indices
+    S_ind = 1:(nt - a_max)
+    R_ind = (a_max + 1):(ny - na + 1)
+
+    list(
+      R_ys_obs = R_ys_obs,
+      n_S_obs = apply(S_ts_obs, 2, function(x) sum(!is.na(x))),
+      n_R_obs = apply(R_ys_obs, 2, function(x) sum(!is.na(x))),
+      n_SR_obs = sapply(1:ns, function(s) {
+        sum(!is.na(S_ts_obs[S_ind,s]) & !is.na(R_ys_obs[R_ind,s]))
+      })
+    )
   })
 
   # add it to the observed data set
-  obs = append(obs, list(R_ys_obs = output))
+  obs = append(obs, output)
 
   # return output
   return(obs)

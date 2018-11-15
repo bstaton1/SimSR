@@ -5,17 +5,18 @@
 #'
 #' @param params A list created using \code{init_sim()}.
 #' @param obs A list created using \code{obs_sim()}.
+#' @param mimic A data frame with columns \code{"stock"} (a stock identifier)
+#'   and \code{"obs"} (a binary indicator for whether that stock was monitored that year).
+#'   This function attempts to mimic this pattern of observation frequency. If \code{NULL} (default),
+#'   the default is for each year to have a 60% of being monitored for each stock.
+#' @param minSRobs Numeric vector of length 1: the minimum number of fully observed
+#'   spawner and recruit brood year pairs allowed. Defaults to 3.
 #'
 #' @return A list containing the filtered observed states.
 #'   Any year not sampled will be an NA.
-#' @examples
-#' x = replicate(100, sum(sample_TS(params, minSRobs = 5, size = 7)))
-#' hist(x)
-#' count_obs_sr_pairs(sample_TS(params, minSRobs = 5))
-#'
 #' @export
 
-obs_filter = function(params, obs, mimic = NULL) {
+obs_filter = function(params, obs, mimic = NULL, minSRobs = 3) {
 
   output = with(append(params, obs), {
 
@@ -24,7 +25,7 @@ obs_filter = function(params, obs, mimic = NULL) {
     # S_ts_obs_filtered = matrix(0, nt, ns)
 
     # matrix of observed years for each stock
-    NA_yrs = replicate(ns, !as.logical(sample_TS(params, mimic = mimic, minSRobs = 5)))
+    NA_yrs = replicate(ns, !as.logical(sample_TS(params, mimic = mimic, minSRobs = minSRobs)))
     # S_ts_obs_filtered[NA_yrs] = NA
 
     for (s in 1:ns) {
@@ -59,7 +60,7 @@ obs_filter = function(params, obs, mimic = NULL) {
 
 count_obs_sr_pairs = function(x) {
   N_ta = matrix(1, length(x), ncol = 4)
-  N_ta[x == 0,] = NA
+  N_ta[x == 0,] = 0
 
   nt = length(x)
   na = 4
@@ -67,22 +68,22 @@ count_obs_sr_pairs = function(x) {
   ny = nt + na - 1
   R_y = rep(NA, ny)
   for (y in 1:ny) {
-    if (y <= (nt - 4)) {
-      brd.yr.runs = diag(N_ta[y:(y+na),])
-      R_y[y+na-1] = sum(brd.yr.runs, na.rm = all(!is.na(brd.yr.runs)))
+    if (y <= (nt - 3)) {
+      brd.yr.runs = diag(N_ta[y:(y+na-1),])
+      R_y[y+na-1] = sum(brd.yr.runs)#, na.rm = all(!is.na(brd.yr.runs)))
     } else {
       next()
     }
   }
 
-  S_ind = 1:(nt - a_max - 1)
-  R_ind = (a_max + 1):(ny - na)
+  S_ind = 1:(nt - a_max)
+  R_ind = (a_max + 1):(ny - na + 1)
 
-  sum(!is.na(x[S_ind]) & !is.na(R_y[R_ind]))
+  sum((x[S_ind] == 1) & (R_y[R_ind] == na))
 }
 
 sample_TS = function(params, mimic = NULL, minSRobs = 3, size = 7) {
-
+  require(StatonMisc)
   with(params, {
     if (is.null(mimic)) {
       mimic = data.frame(
@@ -103,10 +104,12 @@ sample_TS = function(params, mimic = NULL, minSRobs = 3, size = 7) {
     counts = cbind(counts, nocount = size - counts$count)
 
 
-    fit = glm(cbind(count, nocount) ~ stratum,
-              data = counts, family = binomial)
+    fit = suppressWarnings(
+      glm(cbind(count, nocount) ~ stratum,
+          data = counts, family = binomial)
+    )
 
-    # funciton to generate the years sampled in a strata for a stock
+    # function to generate the years sampled in a strata for a stock
     sample_strata = function(fit, stratum) {
       # obtain probability any year in this strata was sampled
       p = predict(fit,
