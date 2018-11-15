@@ -1,11 +1,14 @@
 Package: SimSR
 Title: Tools for Simulating Pacific Salmon Spawner-Recruit Dynamics
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: person("Benjamin", "Staton", email = "statonbe@gmail.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 Depends: R (>= 3.0.0)
 Imports:
-  mvtnorm
+  mvtnorm,
+  StatonMisc
+Remotes:
+  bstaton1/StatonMisc
 License: MIT
 Encoding: UTF-8
 LazyData: true
