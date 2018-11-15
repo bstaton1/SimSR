@@ -6,7 +6,8 @@
 \usage{
 init_sim(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, rho = 0.5,
   min_sigR = 0.4, max_sigR = 0.6, U_SUM = 100,
-  max_p_overfished = 0.1)
+  max_p_overfished = 0.1, min_S_cv = 0.1, max_S_cv = 0.2,
+  min_C_cv = 0.1, max_C_cv = 0.2, x_ESS = 100)
 }
 \arguments{
 \item{nt}{Numeric vector of length 1: the number of
@@ -32,6 +33,16 @@ can be drawn for a substock's recruitment residuals}
 \item{U_SUM}{Numeric vector of length 1: beta sample size of implementation error}
 
 \item{max_p_overfished}{Numeric vector of length 1: used in setting the constant exploitation rate}
+
+\item{min_S_cv}{Numeric vector of length 1: smallest observation CV for any substocks's escapement.}
+
+\item{max_S_cv}{Numeric vector of length 1: largest observation CV for any substocks's escapement.}
+
+\item{min_C_cv}{Numeric vector of length 1: smallest observation CV for any year's total harvest.}
+
+\item{max_C_cv}{Numeric vector of length 1: largest observation CV for any year's total harvest.}
+
+\item{x_ESS}{Numeric vector of length 1: the effective sample size for scale sampling on stocks that have age data.}
 }
 \description{
 Handles setting up the dimensional variables

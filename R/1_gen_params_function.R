@@ -18,10 +18,15 @@
 #' @param max_sigR Similar to \code{min_sigR}
 #' @param U_SUM Numeric vector of length 1: beta sample size of implementation error
 #' @param max_p_overfished Numeric vector of length 1: used in setting the constant exploitation rate
-#'
+#' @param min_S_cv Numeric vector of length 1: smallest observation CV for any substocks's escapement.
+#' @param max_S_cv Numeric vector of length 1: largest observation CV for any substocks's escapement.
+#' @param min_C_cv Numeric vector of length 1: smallest observation CV for any year's total harvest.
+#' @param max_C_cv Numeric vector of length 1: largest observation CV for any year's total harvest.
+#' @param x_ESS Numeric vector of length 1: the effective sample size for scale sampling on stocks that have age data.
 #' @export
 
-init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, rho = 0.5, min_sigR = 0.4, max_sigR = 0.6, U_SUM = 100, max_p_overfished = 0.1) {
+init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, rho = 0.5, min_sigR = 0.4, max_sigR = 0.6, U_SUM = 100, max_p_overfished = 0.1,
+                    min_S_cv = 0.1, max_S_cv = 0.2, min_C_cv = 0.1, max_C_cv = 0.2, x_ESS = 100) {
 
   if (length(U_msy) != length(S_msy)) {
     stop ("U_msy and S_msy must have the same length")
@@ -61,10 +66,8 @@ init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, rho = 0.5, min_
   }
 
   # OBSERVATION VARIABILITY
-  cv_S_ts_obs = matrix(runif(ns, 0.1, 0.2), nt, ns, byrow = T)
-  cv_C_t_obs = rep(runif(1, 0.1, 0.2), nt)
-
-  x_ESS = 100
+  cv_S_ts_obs = matrix(runif(ns, min_S_cv, max_S_cv), nt, ns, byrow = T)
+  cv_C_t_obs = rep(runif(1, min_C_cv, max_C_cv), nt)
 
   out = list(
     ns = ns,
