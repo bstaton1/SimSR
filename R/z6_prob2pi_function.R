@@ -1,9 +1,3 @@
-#' inverse logit
-#'
-#' @param x the value on the logit scale to convert to the natural scale.
-expit = function(x) {
-  exp(x)/(1 + exp(x))
-}
 
 #' Convert Beta Deviates to Dirichlet Deviates
 #'
