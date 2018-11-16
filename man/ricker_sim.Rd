@@ -4,10 +4,14 @@
 \alias{ricker_sim}
 \title{Generate True States}
 \usage{
-ricker_sim(params)
+ricker_sim(params, nb = 50)
 }
 \arguments{
 \item{params}{A list created using \code{init_sim()}.}
+
+\item{nb}{Numeric vector of length 1: the number of years to simulate the population
+before tracking the states of interest. Referred to as the "burn-in" period,
+not to be confused with the burn-in period of a MCMC simulation.}
 }
 \value{
 A list with the true states simulated.

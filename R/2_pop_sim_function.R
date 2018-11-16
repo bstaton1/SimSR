@@ -3,14 +3,26 @@
 #' Simulates Ricker dynamics based on the settings supplied via the input argument.
 #'
 #' @param params A list created using \code{init_sim()}.
+#' @param nb Numeric vector of length 1: the number of years to simulate the population
+#'   before tracking the states of interest. Referred to as the "burn-in" period,
+#'   not to be confused with the burn-in period of a MCMC simulation.
 #'
 #' @return A list with the true states simulated.
 #'
 #' @export
 
-ricker_sim = function(params) {
+ricker_sim = function(params, nb = 50) {
 
   output = with(params, {
+
+    # number of simulation years
+    nyy = ny + nb  # brood years
+    ntt = nt + nb  # calendar years
+
+    # years to keep when all is said and done
+      # these are the indices of the monitored years
+    keep_y = (nb+1):(nb+ny)
+    keep_t = (nb+1):(nb+nt)
 
     # obtain management reference points
     mgmt = gen_mgmt(params = params)
@@ -21,20 +33,20 @@ ricker_sim = function(params) {
     log_resid_0 = 0
 
     # containers (brood years)
-    log_R_ys_mean1 = matrix(NA, ny, ns)
-    log_R_ys_mean2 = matrix(NA, ny, ns)
-    R_ys = matrix(NA, ny, ns)
-    log_R_ys = matrix(NA, ny, ns)
-    log_resid_ys = matrix(NA, ny, ns)
-    p_yas = array(NA, dim = c(ny, na, ns))
+    log_R_ys_mean1 = matrix(NA, nyy, ns)
+    log_R_ys_mean2 = matrix(NA, nyy, ns)
+    R_ys = matrix(NA, nyy, ns)
+    log_R_ys = matrix(NA, nyy, ns)
+    log_resid_ys = matrix(NA, nyy, ns)
+    p_yas = array(NA, dim = c(nyy, na, ns))
 
     # containers (calendar years)
-    S_ts = matrix(NA, nt, ns)
-    N_tas = array(NA, dim = c(nt, na, ns))
-    N_ts = matrix(NA, nt, ns)
-    C_ts = matrix(NA, nt, ns)
-    N_tot_t = rep(NA, nt)
-    U_real = rep(NA, nt)
+    S_ts = matrix(NA, ntt, ns)
+    N_tas = array(NA, dim = c(ntt, na, ns))
+    N_ts = matrix(NA, ntt, ns)
+    C_ts = matrix(NA, ntt, ns)
+    N_tot_t = rep(NA, ntt)
+    U_real = rep(NA, ntt)
 
     # create time-varying and substock-specific maturity schedules
     B_grand = c(-1.4, 1.4, 4)
@@ -46,13 +58,13 @@ ricker_sim = function(params) {
     stock_effect = rnorm(ns, 0, 0.2)
     Sigma_mat = matrix(0.1 * 0.1 * 0.90, ns, ns)
     diag(Sigma_mat) = rep(0.1^2, ns)
-    stock_year_effect = mvtnorm::rmvnorm(ny, mean = stock_effect, Sigma_mat)
-    for (y in 1:ny) {
+    stock_year_effect = mvtnorm::rmvnorm(nyy, mean = stock_effect, Sigma_mat)
+    for (y in 1:nyy) {
       for (s in 1:ns) {
-        p_yas[y,,s] = prob2pi(expit(m %*% (B_grand + c(stock_year_effect[y,s],0,0))))
+        p_yas[y,,s] = prob2pi(StatonMisc::expit(m %*% (B_grand + c(stock_year_effect[y,s],0,0))))
       }
     }
-    pi = prob2pi(expit(m %*% B_grand))
+    pi = prob2pi(StatonMisc::expit(m %*% B_grand))
 
     # first brood year recruits
     log_R_ys_mean1[1,] = log(Req_s)
@@ -97,7 +109,7 @@ ricker_sim = function(params) {
     }
 
     # carry out the rest of the time series
-    for (y in (a_max+1):ny) {
+    for (y in (a_max+1):nyy) {
       # create brood year recruits
       for (s in 1:ns) {
         log_R_ys_mean1[y,s] = log(S_ts[y-a_max,s] * exp(log_alpha[s] - beta[s] * S_ts[y-a_max,s]))
@@ -110,7 +122,7 @@ ricker_sim = function(params) {
       for (s in 1:ns) {
         # place these recruits in calendar year at age
         for (a in 1:na) {
-          if (y-a_min+a > nt) {
+          if (y-a_min+a > ntt) {
             next()
           } else {
             N_tas[y-a_min+a,a,s] = R_ys[y,s] * p_yas[t+na-a,a,s]
@@ -145,16 +157,16 @@ ricker_sim = function(params) {
 
     # package output
     list(
-      R_ys = R_ys,
-      log_resid_ys = log_resid_ys,
-      U_real = U_real,
-      N_ts = N_ts,
-      S_ts = S_ts,
-      C_tot_t = C_tot_t,
-      w_y = w_y,
-      q_ta = q_ta,
-      q_tas = q_tas,
-      p_yas = p_yas
+      R_ys = R_ys[keep_y,],
+      log_resid_ys = log_resid_ys[keep_y,],
+      w_y = w_y[keep_y],
+      U_real = U_real[keep_t],
+      N_ts = N_ts[keep_t,],
+      S_ts = S_ts[keep_t,],
+      C_tot_t = C_tot_t[keep_t],
+      q_ta = q_ta[keep_t,],
+      p_yas = p_yas[keep_y,,],
+      q_tas = q_tas[keep_t,,]
       )
   })
 
