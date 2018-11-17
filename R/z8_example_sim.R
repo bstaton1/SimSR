@@ -22,8 +22,7 @@
 #'
 #' @export
 
-example_sim = function(U_SUM = 100, min_sigR = 0.3, max_sigR = 0.5,
-                       max_p_overfished = 0.3, rho = 0.5, do_plot = F, save = F) {
+example_sim = function(U_SUM = 100, max_p_overfished = 0.3, do_plot = F, save = F) {
   Umsy = c(
     0.6400932, 0.4595393, 0.5518526, 0.3730096,
     0.6774239, 0.4963993, 0.4309589, 0.4991643,
@@ -71,12 +70,3 @@ example_sim = function(U_SUM = 100, min_sigR = 0.3, max_sigR = 0.5,
     obs = gen_Rys_obs(params, obs)
   )
 }
-
-example_sim(
-  U_SUM = 100,
-  min_sigR = 0.3,
-  max_sigR = 0.5,
-  max_p_overfished = 0.3,
-  do_plot = T,
-  save = T
-)
