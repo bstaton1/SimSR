@@ -8,15 +8,18 @@
 #' @param mimic A data frame with columns \code{"stock"} (a stock identifier)
 #'   and \code{"obs"} (a binary indicator for whether that stock was monitored that year).
 #'   This function attempts to mimic this pattern of observation frequency. If \code{NULL} (default),
-#'   the default is for each year to have a 60% of being monitored for each stock.
+#'   the default is for each year to have a 60\% of being monitored for each stock.
 #' @param minSRobs Numeric vector of length 1: the minimum number of fully observed
 #'   spawner and recruit brood year pairs allowed. Defaults to 3.
+#' @param p_age Numeric vector of length 1: the fraction of the stocks to be randomly-assigned
+#'   to have age composition monitored in the same years they have escapement monitored.
+#'   Defaults to 0.5, and the number of stocks is rounded up if a fractional number is specified.
 #'
 #' @return A list containing the filtered observed states.
 #'   Any year not sampled will be an NA.
 #' @export
 
-obs_filter = function(params, obs, mimic = NULL, minSRobs = 3) {
+obs_filter = function(params, obs, mimic = NULL, minSRobs = 3, p_age = 0.5) {
 
   output = with(append(params, obs), {
 
@@ -33,7 +36,7 @@ obs_filter = function(params, obs, mimic = NULL, minSRobs = 3) {
     }
 
     ### AGE COMP DATA FILTERING ###
-    age_comp_stocks = sample(1:ns, ceiling(ns/2))
+    age_comp_stocks = sort(sample(1:ns, ceiling(ns * p_age)))
     x_tas_obs_filtered = array(NA, dim = c(nt, na, length(age_comp_stocks)))
     for (s in 1:length(age_comp_stocks)) {
       x_tas_obs_filtered[!NA_yrs[,age_comp_stocks[s]],,s] =

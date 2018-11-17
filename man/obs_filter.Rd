@@ -4,7 +4,7 @@
 \alias{obs_filter}
 \title{Sample Observed States}
 \usage{
-obs_filter(params, obs, mimic = NULL, minSRobs = 3)
+obs_filter(params, obs, mimic = NULL, minSRobs = 3, p_age = 0.5)
 }
 \arguments{
 \item{params}{A list created using \code{init_sim()}.}
@@ -14,10 +14,14 @@ obs_filter(params, obs, mimic = NULL, minSRobs = 3)
 \item{mimic}{A data frame with columns \code{"stock"} (a stock identifier)
 and \code{"obs"} (a binary indicator for whether that stock was monitored that year).
 This function attempts to mimic this pattern of observation frequency. If \code{NULL} (default),
-the default is for each year to have a 60% of being monitored for each stock.}
+the default is for each year to have a 60\% of being monitored for each stock.}
 
 \item{minSRobs}{Numeric vector of length 1: the minimum number of fully observed
 spawner and recruit brood year pairs allowed. Defaults to 3.}
+
+\item{p_age}{Numeric vector of length 1: the fraction of the stocks to be randomly-assigned
+to have age composition monitored in the same years they have escapement monitored.
+Defaults to 0.5, and the number of stocks is rounded up if a fractional number is specified.}
 }
 \value{
 A list containing the filtered observed states.
