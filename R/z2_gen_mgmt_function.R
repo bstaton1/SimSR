@@ -4,13 +4,13 @@
 #'   for the aggregate stock if all substocks were fished at the same rate.
 #'
 #' @param params A list created using \code{init_sim()}.
+#' @param U_range A sequence at which to calculate the different equilibrium states
 #'
 #' @export
 
-gen_mgmt = function(params) {
+gen_mgmt = function(params, U_range = seq(0, 1, 0.01)) {
 
   output = with(params, {
-    U_range = seq(0, 1, 0.01)
 
     # key parameters for each substock
     sub_params = cbind(alpha, beta, U_msy, S_msy)

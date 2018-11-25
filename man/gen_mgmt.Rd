@@ -4,10 +4,12 @@
 \alias{gen_mgmt}
 \title{Generate Quantities used in Management}
 \usage{
-gen_mgmt(params)
+gen_mgmt(params, U_range = seq(0, 1, 0.01))
 }
 \arguments{
 \item{params}{A list created using \code{init_sim()}.}
+
+\item{U_range}{A sequence at which to calculate the different equilibrium states}
 }
 \description{
 Based on vectors of substock-specific parameters, obtain the biological reference points
