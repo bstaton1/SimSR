@@ -6,12 +6,18 @@
 #' @param nb Numeric vector of length 1: the number of years to simulate the population
 #'   before tracking the states of interest. Referred to as the "burn-in" period,
 #'   not to be confused with the burn-in period of a MCMC simulation.
+#' @param U_strategy Character vector of length 1. Specifies the way the harvest rate target
+#'   is selected based on the true biological reference points. Valid options currently are:
+#'   \code{"Ustar_0.1"}, \code{"Ustar_0.3"}, \code{"Ustar_0.5"}, \code{"U_MSY"}. \code{"Ustar_0.1"} is
+#'   defined as the exploitation rate applied equally to all substocks that would result in
+#'   no more than 10% being overfished.
 #'
 #' @return A list with the true states simulated.
 #'
 #' @export
 
-ricker_sim = function(params, nb = 50) {
+ricker_sim = function(params, nb = 50, U_strategy = "Ustar_0.3") {
+  require(StatonMisc)
 
   output = with(params, {
 
@@ -27,7 +33,18 @@ ricker_sim = function(params, nb = 50) {
     # obtain management reference points
     mgmt = gen_mgmt(params = params)
     Req_s = mgmt$Req_s
-    U_obj = unname(mgmt$mgmt["U_obj"])
+
+    if (U_strategy %!in% names(mgmt$mgmt)) {
+      stop ("please specify a valid value for argument U_strategy. See ?ricker_sim for details.")
+    }
+
+    # if (is.character(U_strategy)) {
+      U_obj = unname(mgmt$mgmt[U_strategy])
+    # } else {
+      # U_obj = U_strategy
+    # }
+
+
 
     # year zero resid
     log_resid_0 = 0
@@ -55,16 +72,16 @@ ricker_sim = function(params, nb = 50) {
       c(1,1,0),
       c(1,0,1)
     )
-    stock_effect = rnorm(ns, 0, 0.2)
-    Sigma_mat = matrix(0.1 * 0.1 * 0.90, ns, ns)
-    diag(Sigma_mat) = rep(0.1^2, ns)
+    stock_effect = rnorm(ns, 0, 0.25)
+    Sigma_mat = matrix(0.2 * 0.2 * 0.90, ns, ns)
+    diag(Sigma_mat) = rep(0.2^2, ns)
     stock_year_effect = mvtnorm::rmvnorm(nyy, mean = stock_effect, Sigma_mat)
     for (y in 1:nyy) {
       for (s in 1:ns) {
         p_yas[y,,s] = prob2pi(StatonMisc::expit(m %*% (B_grand + c(stock_year_effect[y,s],0,0))))
       }
     }
-    pi = prob2pi(StatonMisc::expit(m %*% B_grand))
+    pi_grand = prob2pi(StatonMisc::expit(m %*% B_grand))
 
     # first brood year recruits
     log_R_ys_mean1[1,] = log(Req_s)
@@ -166,7 +183,8 @@ ricker_sim = function(params, nb = 50) {
       C_tot_t = C_tot_t[keep_t],
       q_ta = q_ta[keep_t,],
       p_yas = p_yas[keep_y,,],
-      q_tas = q_tas[keep_t,,]
+      q_tas = q_tas[keep_t,,],
+      pi_grand = pi_grand
       )
   })
 

@@ -4,7 +4,7 @@
 \alias{ricker_sim}
 \title{Generate True States}
 \usage{
-ricker_sim(params, nb = 50)
+ricker_sim(params, nb = 50, U_strategy = "Ustar_0.3")
 }
 \arguments{
 \item{params}{A list created using \code{init_sim()}.}
@@ -12,6 +12,12 @@ ricker_sim(params, nb = 50)
 \item{nb}{Numeric vector of length 1: the number of years to simulate the population
 before tracking the states of interest. Referred to as the "burn-in" period,
 not to be confused with the burn-in period of a MCMC simulation.}
+
+\item{U_strategy}{Character vector of length 1. Specifies the way the harvest rate target
+is selected based on the true biological reference points. Valid options currently are:
+\code{"Ustar_0.1"}, \code{"Ustar_0.3"}, \code{"Ustar_0.5"}, \code{"U_MSY"}. \code{"Ustar_0.1"} is
+defined as the exploitation rate applied equally to all substocks that would result in
+no more than 10% being overfished.}
 }
 \value{
 A list with the true states simulated.
