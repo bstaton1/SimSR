@@ -11,8 +11,9 @@
 #' @param U_msy Numeric vector storing U_msy for each stock to simulate
 #' @param S_msy Same as \code{S_msy}, except S_msy. Must be the same
 #'   length as \code{U_msy}
+#' @param phi Numeric vector of length 1: the autocorrelation coefficient for recruitment residuals.
+#'   Set to zero to turn off the AR(1) process
 #' @param U_SUM Numeric vector of length 1: beta sample size of implementation error
-#' @param max_p_overfished Numeric vector of length 1: used in setting the constant exploitation rate
 #' @param min_S_cv Numeric vector of length 1: smallest observation CV for any substocks's escapement.
 #' @param max_S_cv Numeric vector of length 1: largest observation CV for any substocks's escapement.
 #' @param min_C_cv Numeric vector of length 1: smallest observation CV for any year's total harvest.
@@ -26,7 +27,7 @@
 
 #' @export
 
-init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, rho = 0.5, U_SUM = 100, max_p_overfished = 0.3,
+init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, U_SUM = 100, phi = 0.3,
                     min_S_cv = 0.1, max_S_cv = 0.2, min_C_cv = 0.1, max_C_cv = 0.2, x_ESS = 100) {
 
   if (length(U_msy) != length(S_msy)) {
@@ -43,15 +44,14 @@ init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, rho = 0.5, U_SU
   alpha = exp(U_msy)/(1 - U_msy)
   beta = U_msy/S_msy
   log_alpha = log(alpha)
-  phi = 0.7
 
   # fishery parameters
   v = rep(1, ns)
 
   # create covariance matrix
-  Rwish = matrix(rep(-0.02, ns^2), ns, ns)
-  diag(Rwish) = rep(0.4, ns)
-  dfwish = 40
+  Rwish = matrix(rep(-0.01, ns^2), ns, ns)
+  diag(Rwish) = rep(0.22, ns)
+  dfwish = 35
   Sigma = solve(rWishart(1, df = dfwish, Sigma = Rwish)[,,1])
   sigma = sqrt(diag(Sigma))
 
@@ -82,11 +82,9 @@ init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, rho = 0.5, U_SU
     beta = beta,
     log_alpha = log_alpha,
     phi = phi,
-    max_p_overfished = max_p_overfished,
     U_SUM = U_SUM,
     v = v,
     sigma = sigma,
-    rho = rho,
     Sigma = Sigma,
     rho_mat = rho_mat,
     cv_S_ts_obs = cv_S_ts_obs,
