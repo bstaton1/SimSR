@@ -1,7 +1,9 @@
 #' Generate Quantities used in Management
 #'
 #' Based on vectors of substock-specific parameters, obtain the biological reference points
-#'   for the aggregate stock if all substocks were fished at the same rate.
+#'   for the aggregate stock if all substocks were fished at the same rate. Calculates
+#'   a set of quantities called Sstar_p and Ustar_p. Sstar_p is the smallest aggregate escapement
+#'   where you can still have no more than p*100% of the substocks not overfished.
 #'
 #' @param params A list created using \code{init_sim()}.
 #' @param U_range A sequence at which to calculate the different equilibrium states
@@ -32,19 +34,33 @@ gen_mgmt = function(params, U_range = seq(0, 1, 0.01)) {
     U_MSY = U_range[which.max(Ceq)]
 
     # system-wide MRPs
-    if (all(overfished > max_p_overfished)) {
-      S_obj = NA
-      U_obj = NA
+    if (all(overfished > 0.1)) {
+      Sstar_0.1 = NA
+      Ustar_0.1 = NA
     } else {
-      S_obj = min(Seq[which(overfished < max_p_overfished)])
-      U_obj = max(U_range[which(overfished < max_p_overfished)])
+      Sstar_0.1 = min(Seq[which(overfished <= 0.1)])
+      Ustar_0.1 = max(U_range[which(overfished <= 0.1)])
+    }
+    if (all(overfished > 0.3)) {
+      Sstar0.3 = NA
+      Ustar_0.3 = NA
+    } else {
+      Sstar_0.3 = min(Seq[which(overfished <= 0.3)])
+      Ustar_0.3 = max(U_range[which(overfished <= 0.3)])
+    }
+    if (all(overfished > 0.5)) {
+      Sstar_0.5 = NA
+      Ustar_0.5 = NA
+    } else {
+      Sstar_0.5 = min(Seq[which(overfished <= 0.5)])
+      Ustar_0.5 = max(U_range[which(overfished <= 0.5)])
     }
 
-    # if(S_obj %in% c("Inf", "-Inf")) S_obj = NA
-    # if(U_obj %in% c("Inf", "-Inf")) U_obj = NA
-    #
     list(
-      mgmt = c(S_obj = S_obj, U_obj = U_obj, S_MSY = S_MSY, U_MSY = U_MSY),
+      mgmt = c(
+        Sstar_0.1 = Sstar_0.1, Sstar_0.3 = Sstar_0.3, Sstar_0.5 = Sstar_0.5,
+        Ustar_0.1 = Ustar_0.1, Ustar_0.3 = Ustar_0.3, Ustar_0.5 = Ustar_0.5,
+        S_MSY = S_MSY, U_MSY = U_MSY),
       Seq = Seq,
       Ceq = Ceq,
       Req_s = log(alpha)/beta,

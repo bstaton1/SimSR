@@ -13,5 +13,7 @@ gen_mgmt(params, U_range = seq(0, 1, 0.01))
 }
 \description{
 Based on vectors of substock-specific parameters, obtain the biological reference points
-  for the aggregate stock if all substocks were fished at the same rate.
+  for the aggregate stock if all substocks were fished at the same rate. Calculates
+  a set of quantities called Sstar_p and Ustar_p. Sstar_p is the smallest aggregate escapement
+  where you can still have no more than p*100% of the substocks not overfished.
 }
