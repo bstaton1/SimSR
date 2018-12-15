@@ -4,22 +4,21 @@
 \alias{example_sim}
 \title{An example simulation wrapper}
 \usage{
-example_sim(U_SUM = 100, max_p_overfished = 0.3, do_plot = F,
-  save = F)
+example_sim(do_plot = F, save = F)
 }
 \arguments{
-\item{U_SUM}{passed to \code{init_sim()}}
-
-\item{max_p_overfished}{passed to \code{init_sim()}}
-
 \item{do_plot}{logical. Do you want to make an SRA plot?}
 
 \item{save}{logical. Do you want to save a file containing the plot?
 Only takes effect if \code{do_plot = TRUE}}
 
+\item{U_SUM}{passed to \code{init_sim()}}
+
 \item{min_sigR}{passed to \code{init_sim()}}
 
 \item{max_sigR}{passed to \code{init_sim()}}
+
+\item{max_p_overfished}{passed to \code{init_sim()}}
 
 \item{rho}{passed to \code{init_sim()}}
 }
@@ -28,11 +27,6 @@ An example simulation wrapper
 }
 \examples{
 example_sim(
-  U_SUM = 100,
-  min_sigR = 0.3,
-  max_sigR = 0.5,
-  rho = 0.5,
-  max_p_overfished = 0.3,
   do_plot = F,
   save = F
   )
