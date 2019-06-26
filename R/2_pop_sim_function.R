@@ -10,7 +10,7 @@
 #'   is selected based on the true biological reference points. Valid options currently are:
 #'   \code{"Ustar_0.1"}, \code{"Ustar_0.3"}, \code{"Ustar_0.5"}, \code{"U_MSY"}. \code{"Ustar_0.1"} is
 #'   defined as the exploitation rate applied equally to all substocks that would result in
-#'   no more than 10% being overfished.
+#'   no more than 10\% being overfished.
 #'
 #' @return A list with the true states simulated.
 #'
