@@ -1,12 +1,13 @@
 #' Generate Observed States
 #'
-#' Based on the true states obtained using \code{ricker_sim}, introduce observation errors
+#' Based on the true states obtained using \code{ricker_sim()}, introduce observation errors
+#' for all possibly observable calendar years
 #'
 #' @param params A list created using \code{init_sim()}.
 #' @param true A list created using \code{ricker_sim()}.
 #'
 #' @return A list containing the observed states,
-#'   which are not necessaryily in a format ready for model-fitting
+#'   which are not necessarily in a format ready for model-fitting
 #'
 #' @export
 
@@ -15,8 +16,8 @@ obs_sim = function(params, true) {
   output = with(append(params, true), {
 
     # generate lognormal observation error sd
-    sig_S_ts_obs = sqrt(log(cv_S_ts_obs^2 + 1))
-    sig_C_t_obs = sqrt(log(cv_C_t_obs^2 + 1))
+    sig_S_ts_obs = StatonMisc::cv2sig(cv_S_ts_obs)
+    sig_C_t_obs = StatonMisc::cv2sig(cv_C_t_obs)
 
     # observe spawners
     S_ts_obs = matrix(NA, nt, ns)
@@ -54,7 +55,3 @@ obs_sim = function(params, true) {
   # return output
   return(output)
 }
-
-
-
-

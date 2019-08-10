@@ -13,8 +13,9 @@ obs_sim(params, true)
 }
 \value{
 A list containing the observed states,
-  which are not necessaryily in a format ready for model-fitting
+  which are not necessarily in a format ready for model-fitting
 }
 \description{
-Based on the true states obtained using \code{ricker_sim}, introduce observation errors
+Based on the true states obtained using \code{ricker_sim()}, introduce observation errors
+for all possibly observable calendar years
 }
