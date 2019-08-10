@@ -10,8 +10,7 @@ ricker_sim(params, nb = 50, U_strategy = "Ustar_0.3")
 \item{params}{A list created using \code{init_sim()}.}
 
 \item{nb}{Numeric vector of length 1: the number of years to simulate the population
-before tracking the states of interest. Referred to as the "burn-in" period,
-not to be confused with the burn-in period of a MCMC simulation.}
+before tracking the states of interest.}
 
 \item{U_strategy}{Character vector of length 1. Specifies the way the harvest rate target
 is selected based on the true biological reference points. Valid options currently are:
