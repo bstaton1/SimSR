@@ -14,10 +14,10 @@ obs_filter(params, obs, mimic = NULL, minSRobs = 3, p_age = 0.5)
 \item{mimic}{A data frame with columns \code{"stock"} (a stock identifier)
 and \code{"obs"} (a binary indicator for whether that stock was monitored that year).
 This function attempts to mimic this pattern of observation frequency. If \code{NULL} (default),
-the default is for each year to have a 60\% of being monitored for each stock.}
+then each year and stock will have a 60\% of being monitored.}
 
 \item{minSRobs}{Numeric vector of length 1: the minimum number of fully observed
-spawner and recruit brood year pairs allowed. Defaults to 3.}
+spawner and recruit brood year pairs allowed for any given stock. Defaults to 3.}
 
 \item{p_age}{Numeric vector of length 1: the fraction of the stocks to be randomly-assigned
 to have age composition monitored in the same years they have escapement monitored.
@@ -28,6 +28,6 @@ A list containing the filtered observed states.
   Any year not sampled will be an NA.
 }
 \description{
-Based on the observed states obtained using \code{obs_sim},
-introduce a sampling frequency.
+Based on the observed states obtained using \code{obs_sim()},
+introduce a sampling frequency (i.e., insert missing years of data)
 }

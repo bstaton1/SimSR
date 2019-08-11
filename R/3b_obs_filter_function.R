@@ -1,16 +1,16 @@
 #' Sample Observed States
 #'
-#' Based on the observed states obtained using \code{obs_sim},
-#' introduce a sampling frequency.
+#' Based on the observed states obtained using \code{obs_sim()},
+#' introduce a sampling frequency (i.e., insert missing years of data)
 #'
 #' @param params A list created using \code{init_sim()}.
 #' @param obs A list created using \code{obs_sim()}.
 #' @param mimic A data frame with columns \code{"stock"} (a stock identifier)
 #'   and \code{"obs"} (a binary indicator for whether that stock was monitored that year).
 #'   This function attempts to mimic this pattern of observation frequency. If \code{NULL} (default),
-#'   the default is for each year to have a 60\% of being monitored for each stock.
+#'   then each year and stock will have a 60\% of being monitored.
 #' @param minSRobs Numeric vector of length 1: the minimum number of fully observed
-#'   spawner and recruit brood year pairs allowed. Defaults to 3.
+#'   spawner and recruit brood year pairs allowed for any given stock. Defaults to 3.
 #' @param p_age Numeric vector of length 1: the fraction of the stocks to be randomly-assigned
 #'   to have age composition monitored in the same years they have escapement monitored.
 #'   Defaults to 0.5, and the number of stocks is rounded up if a fractional number is specified.
@@ -25,11 +25,9 @@ obs_filter = function(params, obs, mimic = NULL, minSRobs = 3, p_age = 0.5) {
 
     ### ESCAPEMENT OBSERVATION FILTERING ###
     S_ts_obs_filtered = S_ts_obs
-    # S_ts_obs_filtered = matrix(0, nt, ns)
 
     # matrix of observed years for each stock
     NA_yrs = replicate(ns, !as.logical(sample_TS(params, mimic = mimic, minSRobs = minSRobs)))
-    # S_ts_obs_filtered[NA_yrs] = NA
 
     for (s in 1:ns) {
       S_ts_obs_filtered[NA_yrs[,s],s] = NA
@@ -42,7 +40,6 @@ obs_filter = function(params, obs, mimic = NULL, minSRobs = 3, p_age = 0.5) {
       x_tas_obs_filtered[!NA_yrs[,age_comp_stocks[s]],,s] =
         x_tas_obs[!NA_yrs[,age_comp_stocks[s]],,age_comp_stocks[s]]
     }
-    # x_tas_obs_filtered[is.na(x_tas_obs_filtered)] = 0
 
     # return output
     list(
@@ -61,33 +58,11 @@ obs_filter = function(params, obs, mimic = NULL, minSRobs = 3, p_age = 0.5) {
   return(obs)
 }
 
-count_obs_sr_pairs = function(x) {
-  N_ta = matrix(1, length(x), ncol = 4)
-  N_ta[x == 0,] = 0
-
-  nt = length(x)
-  na = 4
-  a_max = 7
-  ny = nt + na - 1
-  R_y = rep(NA, ny)
-  for (y in 1:ny) {
-    if (y <= (nt - 3)) {
-      brd.yr.runs = diag(N_ta[y:(y+na-1),])
-      R_y[y+na-1] = sum(brd.yr.runs)#, na.rm = all(!is.na(brd.yr.runs)))
-    } else {
-      next()
-    }
-  }
-
-  S_ind = 1:(nt - a_max)
-  R_ind = (a_max + 1):(ny - na + 1)
-
-  sum((x[S_ind] == 1) & (R_y[R_ind] == na))
-}
-
 sample_TS = function(params, mimic = NULL, minSRobs = 3, size = 7) {
   require(StatonMisc)
   with(params, {
+
+    # determine the frequency to mimic
     if (is.null(mimic)) {
       mimic = data.frame(
         stock = rep(1:ns, each = nt),
@@ -115,9 +90,10 @@ sample_TS = function(params, mimic = NULL, minSRobs = 3, size = 7) {
     # function to generate the years sampled in a strata for a stock
     sample_strata = function(fit, stratum) {
       # obtain probability any year in this strata was sampled
-      p = predict(fit,
-                  newdata = data.frame(stratum = stratum),
-                  type = "response")
+      p = predict(
+        fit,
+        newdata = data.frame(stratum = stratum),
+        type = "response")
 
       # generate the vector
       rbinom(n = size, size = 1, prob = p)
@@ -126,7 +102,7 @@ sample_TS = function(params, mimic = NULL, minSRobs = 3, size = 7) {
     # create the time series sampled
     # if the number of SR pair years is less than a threshold, try again
     x = rep(0, nt)
-    while(count_obs_sr_pairs(x) < minSRobs) {
+    while(count_obs_sr_pairs(x, a_max, na) < minSRobs) {
       # cat("\r", i)
       x = as.numeric(sapply(1:(nt/size), function(s) sample_strata(fit, s)))
       # i = i + 1
