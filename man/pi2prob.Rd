@@ -2,10 +2,12 @@
 % Please edit documentation in R/z6_prob2pi_function.R
 \name{pi2prob}
 \alias{pi2prob}
-\title{Convert Beta Deviates to Dirichlet Deviates}
+\title{Maturity Conversion Function 1}
 \usage{
 pi2prob(pi)
 }
 \description{
-Convert Beta Deviates to Dirichlet Deviates
+Converts a vector from the marginal probability of maturity at each age
+to a vector containing the conditional probabilities of maturity at ages
+\code{a:(a_max-1)} given not yet matured.
 }

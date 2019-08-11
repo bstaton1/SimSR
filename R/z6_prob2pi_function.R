@@ -1,6 +1,8 @@
-
-#' Convert Beta Deviates to Dirichlet Deviates
+#' Maturity Conversion Function 1
 #'
+#' Converts a vector from the marginal probability of maturity at each age
+#' to a vector containing the conditional probabilities of maturity at ages
+#' \code{a:(a_max-1)} given not yet matured.
 
 pi2prob = function(pi) {
   A = length(pi)
@@ -13,6 +15,10 @@ pi2prob = function(pi) {
   prob
 }
 
+#' Maturity Conversion Function 2
+#'
+#' Reverses the action of \code{\link{pi2prob}}
+
 prob2pi = function(prob) {
   A = length(prob) + 1
   pi = numeric(A)
@@ -22,6 +28,11 @@ prob2pi = function(prob) {
 
   pi
 }
+
+#' Maturity Conversion Function 3
+#'
+#' Converts from \code{pi} to a set of logit-scale coefficients that is used to obtain
+#' the \code{prob} vector
 
 pi2beta = function(pi) {
   prob = pi2prob(pi)
