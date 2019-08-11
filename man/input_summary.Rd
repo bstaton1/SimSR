@@ -7,12 +7,12 @@
 input_summary(params, obs, true, seed)
 }
 \arguments{
-\item{params}{a list object created with \code{init_sim()}}
+\item{params}{a list object created with \code{\link{init_sim}}}
 
 \item{obs}{a list object created with the observation generation
 functions workflow.}
 
-\item{true}{a list object created by \code{ricker_sim()}}
+\item{true}{a list object created by \code{\link{ricker_sim}}}
 
 \item{seed}{An identifier for this set of inputs}
 }

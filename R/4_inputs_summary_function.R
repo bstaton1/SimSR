@@ -3,10 +3,10 @@
 #' Reformats key information from the
 #'   three primary input lists for writing to output files
 #'
-#' @param params a list object created with \code{init_sim()}
+#' @param params a list object created with \code{\link{init_sim}}
 #' @param obs a list object created with the observation generation
 #'   functions workflow.
-#' @param true a list object created by \code{ricker_sim()}
+#' @param true a list object created by \code{\link{ricker_sim}}
 #' @param seed An identifier for this set of inputs
 #'
 #' @export
@@ -20,6 +20,7 @@ input_summary = function(params, obs, true, seed) {
     mean_rho = mean(rho_mat2, na.rm = T)
     mean_sigma_R = mean(sigma)
 
+    # get meaningful management reference points
     mrp = gen_mgmt(params)$mgmt
 
     # names of the things being summarized
