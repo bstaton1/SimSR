@@ -4,7 +4,8 @@
 \alias{ricker_sim}
 \title{Generate True States}
 \usage{
-ricker_sim(params, nb = 50, U_strategy = "Ustar_0.3")
+ricker_sim(params, nb = 50, U_strategy = "Ustar_0.3",
+  stock_sd = 0.25, year_sd = 0.2, stock_year_rho = 0.9)
 }
 \arguments{
 \item{params}{A list created using \code{init_sim()}.}
@@ -17,6 +18,12 @@ is selected based on the true biological reference points. Valid options current
 \code{"Ustar_0.1"}, \code{"Ustar_0.3"}, \code{"Ustar_0.5"}, \code{"U_MSY"}. \code{"Ustar_0.1"} is
 defined as the exploitation rate applied equally to all substocks that would result in
 no more than 10\% being overfished.}
+
+\item{stock_sd}{numeric vector of length 1: the standard deviation of stock effects in the maturity schedule formation}
+
+\item{year_sd}{numeric vector of length 1: the standard deviation of year effects in the maturity schedule formation}
+
+\item{stock_year_rho}{numeric vector of length 1: the correlation between stocks and years in the maturity schedule formation}
 }
 \value{
 A list with the true states simulated.

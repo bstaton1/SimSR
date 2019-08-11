@@ -10,12 +10,15 @@
 #'   \code{"Ustar_0.1"}, \code{"Ustar_0.3"}, \code{"Ustar_0.5"}, \code{"U_MSY"}. \code{"Ustar_0.1"} is
 #'   defined as the exploitation rate applied equally to all substocks that would result in
 #'   no more than 10\% being overfished.
+#' @param stock_sd numeric vector of length 1: the standard deviation of stock effects in the maturity schedule formation
+#' @param year_sd numeric vector of length 1: the standard deviation of year effects in the maturity schedule formation
+#' @param stock_year_rho numeric vector of length 1: the correlation between stocks and years in the maturity schedule formation
 #'
 #' @return A list with the true states simulated.
 #' @importFrom StatonMisc %!in%
 #' @export
 
-ricker_sim = function(params, nb = 50, U_strategy = "Ustar_0.3") {
+ricker_sim = function(params, nb = 50, U_strategy = "Ustar_0.3", stock_sd = 0.25, year_sd = 0.2, stock_year_rho = 0.9) {
 
   output = with(params, {
 
@@ -36,13 +39,7 @@ ricker_sim = function(params, nb = 50, U_strategy = "Ustar_0.3") {
       stop ("please specify a valid value for argument U_strategy. See ?ricker_sim for details.")
     }
 
-    # if (is.character(U_strategy)) {
-      U_obj = unname(mgmt$mgmt[U_strategy])
-    # } else {
-      # U_obj = U_strategy
-    # }
-
-
+    U_obj = unname(mgmt$mgmt[U_strategy])
 
     # year zero resid
     log_resid_0 = 0
@@ -64,22 +61,21 @@ ricker_sim = function(params, nb = 50, U_strategy = "Ustar_0.3") {
     U_real = rep(NA, ntt)
 
     # create time-varying and substock-specific maturity schedules
-    B_grand = c(-1.4, 1.4, 4)
+    B_grand = as.numeric(pi2beta(pi_grand))
     m = rbind(
       c(1,0,0),
       c(1,1,0),
       c(1,0,1)
     )
-    stock_effect = rnorm(ns, 0, 0.25)
-    Sigma_mat = matrix(0.2 * 0.2 * 0.90, ns, ns)
-    diag(Sigma_mat) = rep(0.2^2, ns)
+    stock_effect = rnorm(ns, 0, stock_sd)
+    Sigma_mat = matrix(year_sd * year_sd * stock_year_rho, ns, ns)
+    diag(Sigma_mat) = rep(year_sd^2, ns)
     stock_year_effect = mvtnorm::rmvnorm(nyy, mean = stock_effect, Sigma_mat)
     for (y in 1:nyy) {
       for (s in 1:ns) {
         p_yas[y,,s] = prob2pi(StatonMisc::expit(m %*% (B_grand + c(stock_year_effect[y,s],0,0))))
       }
     }
-    pi_grand = prob2pi(StatonMisc::expit(m %*% B_grand))
 
     # first brood year recruits
     log_R_ys_mean1[1,] = log(Req_s)
@@ -103,7 +99,6 @@ ricker_sim = function(params, nb = 50, U_strategy = "Ustar_0.3") {
     for (s in 1:ns) {
       for (t in 1:a_max) {
         for (a in 1:na) {
-          # N_tas[t,a,s] = R_ys[t+na-a,s] * pi[a]
           N_tas[t,a,s] = R_ys[t+na-a,s] * p_yas[t+na-a,a,s]
         }
       }

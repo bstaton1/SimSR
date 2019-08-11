@@ -13,6 +13,9 @@
 #'   length as \code{U_msy}
 #' @param phi Numeric vector of length 1: the autocorrelation coefficient for recruitment residuals.
 #'   Set to zero to turn off the AR(1) process
+#' @param pi_grand Average maturity schedule across all stocks and years. Must have the same length as
+#'   suggested by the number of ages of maturity calculated from supplied arguments \code{a_min} and \code{a_max}.
+#'   Will be scaled to sum to 1 if does not already.
 #' @param U_SUM Numeric vector of length 1: beta sample size of implementation error
 #' @param min_S_cv Numeric vector of length 1: smallest observation CV for any substocks's escapement.
 #' @param max_S_cv Numeric vector of length 1: largest observation CV for any substocks's escapement.
@@ -24,7 +27,7 @@
 
 #' @export
 
-init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, U_SUM = 100, phi = 0.3,
+init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, U_SUM = 100, phi = 0.3, pi_grand = c(0.2, 0.4, 0.37, 0.03),
                     min_S_cv = 0.1, max_S_cv = 0.2, min_C_cv = 0.1, max_C_cv = 0.2, x_ESS = 100) {
 
   if (length(U_msy) != length(S_msy)) {
@@ -36,6 +39,12 @@ init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, U_SUM = 100, ph
   na = a_max - a_min + 1
   ages = a_min:a_max
   ny = nt + na - 1
+
+  if (length(pi_grand) != na) {
+    stop ("pi_grand supplied with a different number of elements than suggested by a_min and a_max, not allowed")
+  }
+  # ensure pi_grand sums to 1
+  pi_grand = pi_grand/sum(pi_grand)
 
   # obtain leading parameters on other scale
   alpha = exp(U_msy)/(1 - U_msy)
@@ -72,7 +81,6 @@ init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, U_SUM = 100, ph
     na = na,
     ages = ages,
     ny = ny,
-    pi = pi,
     U_msy = U_msy,
     S_msy = S_msy,
     alpha = alpha,
@@ -86,6 +94,7 @@ init_sim = function(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, U_SUM = 100, ph
     rho_mat = rho_mat,
     cv_S_ts_obs = cv_S_ts_obs,
     cv_C_t_obs = cv_C_t_obs,
+    pi_grand = pi_grand,
     x_ESS = x_ESS
   )
 

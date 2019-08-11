@@ -5,8 +5,8 @@
 \title{Initialize Simulation}
 \usage{
 init_sim(nt = 42, a_min = 4, a_max = 7, U_msy, S_msy, U_SUM = 100,
-  phi = 0.3, min_S_cv = 0.1, max_S_cv = 0.2, min_C_cv = 0.1,
-  max_C_cv = 0.2, x_ESS = 100)
+  phi = 0.3, pi_grand = c(0.2, 0.4, 0.37, 0.03), min_S_cv = 0.1,
+  max_S_cv = 0.2, min_C_cv = 0.1, max_C_cv = 0.2, x_ESS = 100)
 }
 \arguments{
 \item{nt}{Numeric vector of length 1: the number of
@@ -25,6 +25,10 @@ length as \code{U_msy}}
 
 \item{phi}{Numeric vector of length 1: the autocorrelation coefficient for recruitment residuals.
 Set to zero to turn off the AR(1) process}
+
+\item{pi_grand}{Average maturity schedule across all stocks and years. Must have the same length as
+suggested by the number of ages of maturity calculated from supplied arguments \code{a_min} and \code{a_max}.
+Will be scaled to sum to 1 if does not already.}
 
 \item{min_S_cv}{Numeric vector of length 1: smallest observation CV for any substocks's escapement.}
 
