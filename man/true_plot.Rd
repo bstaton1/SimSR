@@ -4,14 +4,14 @@
 \alias{true_plot}
 \title{Create a plot of the true states}
 \usage{
-true_plot(params, true, new_window = T, type = "SRA")
+true_plot(params, true, ext_device = T, type = "SRA")
 }
 \arguments{
-\item{params}{A list created with \code{init_sim()}}
+\item{params}{A list created with \code{\link{init_sim}}}
 
-\item{true}{A list created with \code{ricker_sim()}}
+\item{true}{A list created with \code{\link{ricker_sim}}}
 
-\item{new_window}{logical. Do you want the plots to open in a new window?}
+\item{ext_device}{logical. Do you want the plots to open in an external device?}
 
 \item{type}{character vector. Current accepted types are \code{"SRA"} and \code{"spawners"}}
 }

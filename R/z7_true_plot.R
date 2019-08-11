@@ -1,15 +1,15 @@
 #' Create a plot of the true states
 #'
-#' @param params A list created with \code{init_sim()}
-#' @param true A list created with \code{ricker_sim()}
-#' @param new_window logical. Do you want the plots to open in a new window?
+#' @param params A list created with \code{\link{init_sim}}
+#' @param true A list created with \code{\link{ricker_sim}}
+#' @param ext_device logical. Do you want the plots to open in an external device?
 #' @param type character vector. Current accepted types are \code{"SRA"} and \code{"spawners"}
 #'
 #' @export
 
-true_plot = function(params, true, new_window = T, type = "SRA") {
+true_plot = function(params, true, ext_device = T, type = "SRA") {
 
-  if (new_window) windows()
+  if (ext_device) StatonMisc::ext_device()
 
   with(append(params, true), {
 
@@ -18,7 +18,6 @@ true_plot = function(params, true, new_window = T, type = "SRA") {
       R_ind = (a_max + 1):ny
       par(mfrow = c(3,5), mar = c(2,1.5,1,1), oma = c(0, 0.5, 0, 0))
       for (s in 1:ns) {
-        # plot(R_ts[,s], type = "l")
         plot(R_ys[R_ind,s] ~ S_ts[S_ind,s], pch = 16, ylim = c(0, max(R_ys[R_ind,s])), xlim = c(0, max(log(alpha[s])/beta[s], S_ts[S_ind,s])))
         curve(x * exp(log_alpha[s] - beta[s] * x), from = 0, to = max(log(alpha[s])/beta[s], S_ts[S_ind,s]), add = T)
         usr = par("usr"); xdiff = diff(usr[1:2]); ydiff = diff(usr[3:4])
@@ -46,7 +45,6 @@ true_plot = function(params, true, new_window = T, type = "SRA") {
         abline(h = 0, lty = 2)
       }
     }
-
   })
 }
 
