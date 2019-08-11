@@ -9,14 +9,14 @@ eq_ricker(alpha, beta, U_msy, S_msy, U_range)
 \arguments{
 \item{alpha}{a numeric vector of length 1.}
 
+\item{beta}{a numeric vector of length 1.}
+
 \item{U_msy}{a numeric vector of length 1.}
 
 \item{S_msy}{a numeric vector of length 1.}
 
 \item{U_range}{a numeric vector storing the exploitation
 rates to calculate the equilibrium quantities at.}
-
-\item{alpha}{a numeric vector of length 1.}
 }
 \description{
 Given known (or estimated) values of alpha, beta,

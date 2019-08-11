@@ -5,7 +5,7 @@
 #'   calculate Seq and Ceq at each of a set of exploitation rates
 #'
 #' @param alpha a numeric vector of length 1.
-#' @param alpha a numeric vector of length 1.
+#' @param beta a numeric vector of length 1.
 #' @param U_msy a numeric vector of length 1.
 #' @param S_msy a numeric vector of length 1.
 #' @param U_range a numeric vector storing the exploitation
@@ -27,5 +27,4 @@ eq_ricker = function(alpha, beta, U_msy, S_msy, U_range) {
 
   # output
   return(list(S = Seq, C = Ceq, overfished = overfished, extinct = extinct))
-
 }
