@@ -16,3 +16,6 @@ Can be length > 1.}
 \description{
 Converts alpha and beta into Smsy and Umsy.
 }
+\note{
+The conversion of alpha to U_msy is an approximation, as there is no analytical solution.
+}

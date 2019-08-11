@@ -6,6 +6,7 @@
 #'   Can be length > 1.
 #' @param @beta a numeric vector representing the beta parameter from a SRA.
 #'   Can be length > 1.
+#' @note The conversion of alpha to U_msy is an approximation, as there is no analytical solution.
 #'
 #' @export
 
