@@ -1,10 +1,10 @@
 #' Generate Observed States
 #'
-#' Based on the true states obtained using \code{ricker_sim()}, introduce observation errors
+#' Based on the true states obtained using \code{\link{ricker_sim}}, introduce observation errors
 #' for all possibly observable calendar years
 #'
-#' @param params A list created using \code{init_sim()}.
-#' @param true A list created using \code{ricker_sim()}.
+#' @param params A list created using \code{\link{init_sim}}.
+#' @param true A list created using \code{\link{ricker_sim}}.
 #'
 #' @return A list containing the observed states,
 #'   which are not necessarily in a format ready for model-fitting

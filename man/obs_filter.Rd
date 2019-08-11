@@ -7,9 +7,9 @@
 obs_filter(params, obs, mimic = NULL, minSRobs = 3, p_age = 0.5)
 }
 \arguments{
-\item{params}{A list created using \code{init_sim()}.}
+\item{params}{A list created using \code{\link{init_sim}}.}
 
-\item{obs}{A list created using \code{obs_sim()}.}
+\item{obs}{A list created using \code{\link{obs_sim}}.}
 
 \item{mimic}{A data frame with columns \code{"stock"} (a stock identifier)
 and \code{"obs"} (a binary indicator for whether that stock was monitored that year).
@@ -25,9 +25,9 @@ Defaults to 0.5, and the number of stocks is rounded up if a fractional number i
 }
 \value{
 A list containing the filtered observed states.
-  Any year not sampled will be an NA.
+  Any year not sampled will be stored as an NA.
 }
 \description{
-Based on the observed states obtained using \code{obs_sim()},
+Based on the observed states obtained using \code{\link{obs_sim}},
 introduce a sampling frequency (i.e., insert missing years of data)
 }

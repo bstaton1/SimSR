@@ -7,15 +7,15 @@
 obs_sim(params, true)
 }
 \arguments{
-\item{params}{A list created using \code{init_sim()}.}
+\item{params}{A list created using \code{\link{init_sim}}.}
 
-\item{true}{A list created using \code{ricker_sim()}.}
+\item{true}{A list created using \code{\link{ricker_sim}}.}
 }
 \value{
 A list containing the observed states,
   which are not necessarily in a format ready for model-fitting
 }
 \description{
-Based on the true states obtained using \code{ricker_sim()}, introduce observation errors
+Based on the true states obtained using \code{\link{ricker_sim}}, introduce observation errors
 for all possibly observable calendar years
 }
