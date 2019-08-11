@@ -2,10 +2,12 @@
 #'
 #' Based on vectors of substock-specific parameters, obtain the biological reference points
 #'   for the aggregate stock if all substocks were fished at the same rate. Calculates
-#'   a set of quantities called Sstar_p and Ustar_p. Sstar_p is the smallest aggregate escapement
-#'   where you can still have no more than p*100% of the substocks not overfished.
+#'   a set of quantities called \code{Sstar_p} and \code{Ustar_p}. \code{Sstar_p}
+#'   is the smallest aggregate escapement where you can still have no more than p*100\% of
+#'   the substocks not overfished. \code{Ustar_p} is the maximum exploitation rate without more
+#'   than p*100\% of the substocks overfished.
 #'
-#' @param params A list created using \code{init_sim()}.
+#' @param params A list created using \code{\link{init_sim}}.
 #' @param U_range A sequence at which to calculate the different equilibrium states
 #'
 #' @export
@@ -18,10 +20,10 @@ gen_mgmt = function(params, U_range = seq(0, 1, 0.01)) {
     sub_params = cbind(alpha, beta, U_msy, S_msy)
 
     # determine the equilibrium quantities for each substock at various exploitation rates (U_range)
-    Seq_s = apply(sub_params, 1, function(x) eq_ricker(alpha = x["alpha"], beta = x["beta"], U_msy = x["U_msy"], S_msy = x["S_msy"], U_range = U_range)$S)
-    Ceq_s = apply(sub_params, 1, function(x) eq_ricker(alpha = x["alpha"], beta = x["beta"], U_msy = x["U_msy"], S_msy = x["S_msy"], U_range = U_range)$C)
-    overfished_s = apply(sub_params, 1, function(x) eq_ricker(alpha = x["alpha"], beta = x["beta"], U_msy = x["U_msy"], S_msy = x["S_msy"], U_range = U_range)$overfished)
-    extinct_s = apply(sub_params, 1, function(x) eq_ricker(alpha = x["alpha"], beta = x["beta"], U_msy = x["U_msy"], S_msy = x["S_msy"], U_range = U_range)$extinct)
+    Seq_s = apply(sub_params, 1, function(x) with(as.list(x), eq_ricker(alpha, beta, U_msy, S_msy, U_range = U_range)$S))
+    Ceq_s = apply(sub_params, 1, function(x) with(as.list(x), eq_ricker(alpha, beta, U_msy, S_msy, U_range = U_range)$C))
+    overfished_s = apply(sub_params, 1, function(x) with(as.list(x), eq_ricker(alpha, beta, U_msy, S_msy, U_range = U_range)$overfished))
+    extinct_s = apply(sub_params, 1, function(x) with(as.list(x), eq_ricker(alpha, beta, U_msy, S_msy, U_range = U_range)$extinct))
 
     # sum across substocks
     Seq = rowSums(Seq_s)
