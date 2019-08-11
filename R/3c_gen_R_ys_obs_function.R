@@ -1,16 +1,19 @@
 #' Obtain Brood Year Recruits
 #'
 #' Reconstruct the brood table to get the number of fish that were produced by a single
-#' spawning event.
+#' spawning event. For indexing, recruit abundance in brood year \code{a_max+1}
+#' was produced by spawner abundance in calendar year 1.
 #'
-#' @param params A list created using \code{init_sim()}.
-#' @param obs A list created using \code{obs_sim()}.
 #'
-#' @details Currently, a brood year becomes an NA if any
+#' @param params A list created using \code{\link{init_sim}}.
+#' @param obs A list created using \code{\link{obs_sim}}.
+#'
+#' @details Currently, a brood year recruitment event becomes an NA if any
 #'   one of the return years was missing in the escapement counts.
 #'   For stocks without age composition sampling, the average
 #'   age composition observed for monitored stocks is used to allocate
-#'   abundance-at-age-and-year to brood year recruits.
+#'   abundance-at-age-and-year to brood year recruits. The assumption is made that
+#'   all substocks received the same exploitation rate.
 #'
 #' @return An updated list which contains all of the contents of the \code{obs} list
 #'   supplied as an argument
@@ -58,7 +61,7 @@ gen_Rys_obs = function(params, obs) {
 
       # generate brood year recruits for each stock
       for (y in 1:ny) {
-        if (y <= (nt - 3)) {
+        if (y <= (nt - na + 1)) {
           brd.yr.runs = diag(N_tas_obs[y:(y+na-1),,s])
           R_ys_obs[y+na-1,s] = sum(brd.yr.runs, na.rm = all(!is.na(brd.yr.runs)))
         } else {
@@ -67,7 +70,7 @@ gen_Rys_obs = function(params, obs) {
       }
     }
 
-    N_ts_obs = apply(N_tas_obs, 3, rowSums)
+    R_ys_obs[R_ys_obs == "NaN"] = NA
 
     # brood year indices
     S_ind = 1:(nt - a_max)
@@ -89,4 +92,3 @@ gen_Rys_obs = function(params, obs) {
   # return output
   return(obs)
 }
-

@@ -7,9 +7,9 @@
 gen_Rys_obs(params, obs)
 }
 \arguments{
-\item{params}{A list created using \code{init_sim()}.}
+\item{params}{A list created using \code{\link{init_sim}}.}
 
-\item{obs}{A list created using \code{obs_sim()}.}
+\item{obs}{A list created using \code{\link{obs_sim}}.}
 }
 \value{
 An updated list which contains all of the contents of the \code{obs} list
@@ -17,12 +17,14 @@ An updated list which contains all of the contents of the \code{obs} list
 }
 \description{
 Reconstruct the brood table to get the number of fish that were produced by a single
-spawning event.
+spawning event. For indexing, recruit abundance in brood year \code{a_max+1}
+was produced by spawner abundance in calendar year 1.
 }
 \details{
-Currently, a brood year becomes an NA if any
+Currently, a brood year recruitment event becomes an NA if any
   one of the return years was missing in the escapement counts.
   For stocks without age composition sampling, the average
   age composition observed for monitored stocks is used to allocate
-  abundance-at-age-and-year to brood year recruits.
+  abundance-at-age-and-year to brood year recruits. The assumption is made that
+  all substocks received the same exploitation rate.
 }
