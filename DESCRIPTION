@@ -14,3 +14,5 @@ License: MIT
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+URL: https://github.com/bstaton1/SimSR
+BugReports: https://github.com/bstaton1/SimSR/issues
