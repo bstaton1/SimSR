@@ -10,6 +10,7 @@
 #' @param S_msy a numeric vector of length 1.
 #' @param U_range a numeric vector storing the exploitation
 #'   rates to calculate the equilibrium quantities at.
+#' @export
 
 eq_ricker = function(alpha, beta, U_msy, S_msy, U_range) {
 
