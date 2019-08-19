@@ -1,6 +1,6 @@
 # SimSR
 
-This is an R package written to facilitate simulating Ricker spawner-recruit dynamics, particularly in the case of age-structured, mixed-stock fisheries. It was designed to generate input information for used by the functions in the `FitSR` [package](<https://github.com/bstaton1/FitSR/>). It may be installed using:
+This is an R package written to facilitate simulating Ricker spawner-recruit dynamics, particularly in the case of age-structured, mixed-stock fisheries. It was designed to generate input information for use by the functions in the `FitSR` [package](<https://github.com/bstaton1/FitSR/>). The most current version may be installed using:
 
 ```R
 devtools::install_github("bstaton1/SimSR")
@@ -66,8 +66,11 @@ This will impose a sampling frequency where each population has escapement monit
 
 ### Notes
 
-The functions are not set up to handle age structures with fewer than possible ages of maturity, but can handle scenarios with any number of ages greater than this. 
+The functions are not set up to handle age structures with fewer than three possible ages of maturity, but can handle scenarios with any number of ages greater than this. 
 
 The functions used for observing populations are not set up for fewer than two populations. The simulation of true dynamics can handle only one population.
 
 Version `v0.1.3` was used in the analyses for B. Staton's dissertation and the subsequent manuscript.
+
+Bug reports or feature requests are invited as "Issues"; any contributions are invited through the pull request system.
+
